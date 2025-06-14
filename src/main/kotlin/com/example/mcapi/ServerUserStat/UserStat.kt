@@ -1,10 +1,10 @@
-package com.example.mcapi.user_stat
+package com.example.mcapi.ServerUserStat
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 //힘 : STR / 지혜 : WIS / 오감 : SEN / 체력 : VIT / 지구력 : END / 정신력 : MND
 @Entity
-data class Stat(
+data class UserStat(
     @Id val uuid: String,
     var Stat: Int = 0,
     var STR: Int = 0,

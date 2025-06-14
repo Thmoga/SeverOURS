@@ -1,4 +1,4 @@
-package com.example.mcapi.user_stat
+package com.example.mcapi.ServerUserStat
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -34,7 +34,7 @@ class StatController(private val repo: StatRepository) {
             @RequestParam stat: String
         ): ResponseEntity<StatValueResponse> {
             val userStat = repo.findById(uuid).orElseGet {
-                val newStat = Stat(uuid, 0, 0, 0, 0, 0, 0, 0)
+                val newStat = UserStat(uuid, 0, 0, 0, 0, 0, 0, 0)
                 repo.save(newStat)
             }
 
@@ -53,9 +53,9 @@ class StatController(private val repo: StatRepository) {
         }
 
     @PostMapping("/add")
-    fun addStat(@RequestBody request: StatRequest): ResponseEntity<Stat> {
+    fun addStat(@RequestBody request: StatRequest): ResponseEntity<UserStat> {
         println("코드를 불러왔습니다.")
-        val stat = repo.findById(request.uuid).orElse(Stat(request.uuid, 0, 0, 0, 0, 0, 0, 0))
+        val stat = repo.findById(request.uuid).orElse(UserStat(request.uuid, 0, 0, 0, 0, 0, 0, 0))
         println("🟢 [addStat] uuid=${request.uuid}, stat=${request.stat}, amount=${request.amount}")
         if(request.stat == "스텟"){ stat.Stat += request.amount }
         else if(request.stat == "힘"){ stat.STR += request.amount }
@@ -68,8 +68,8 @@ class StatController(private val repo: StatRepository) {
     }
 
     @PostMapping("/decrease")
-    fun decreaseStat(@RequestBody request: StatRequest): ResponseEntity<Stat> {
-        val stat = repo.findById(request.uuid).orElse(Stat(request.uuid, 0, 0, 0, 0, 0, 0, 0))
+    fun decreaseStat(@RequestBody request: StatRequest): ResponseEntity<UserStat> {
+        val stat = repo.findById(request.uuid).orElse(UserStat(request.uuid, 0, 0, 0, 0, 0, 0, 0))
         if(request.stat == "스텟"){
             if (stat.Stat < request.amount) {
                 stat.Stat = 0
@@ -124,8 +124,8 @@ class StatController(private val repo: StatRepository) {
     }
 
     @PostMapping("/set")
-    fun setStat(@RequestBody request: StatRequest): ResponseEntity<Stat> {
-        val stat = repo.findById(request.uuid).orElse(Stat(request.uuid, 0, 0, 0, 0, 0, 0, 0))
+    fun setStat(@RequestBody request: StatRequest): ResponseEntity<UserStat> {
+        val stat = repo.findById(request.uuid).orElse(UserStat(request.uuid, 0, 0, 0, 0, 0, 0, 0))
         if(request.stat == "스텟"){ stat.Stat = request.amount }
         else if(request.stat == "힘"){ stat.STR = request.amount }
         else if(request.stat == "지혜"){ stat.WIS = request.amount }

@@ -1,4 +1,4 @@
-package com.example.mcapi.user_money
+package com.example.mcapi.ServerUserMoney
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -11,24 +11,24 @@ data class MoneyRequest(val uuid: String, val amount: Int)
 class MoneyController(private val repo: MoneyRepository) {
 
     @GetMapping("/{uuid}")
-    fun getMoney(@PathVariable uuid: String): ResponseEntity<Money> {
+    fun getMoney(@PathVariable uuid: String): ResponseEntity<UserMoney> {
         val money = repo.findById(uuid).orElseGet {
-            val newMoney = Money(uuid, 0)
+            val newMoney = UserMoney(uuid, 0)
             repo.save(newMoney)
         }
         return ResponseEntity.ok(money)
     }
 
     @PostMapping("/add")
-    fun addMoney(@RequestBody request: MoneyRequest): ResponseEntity<Money> {
-        val money = repo.findById(request.uuid).orElse(Money(request.uuid, 0))
+    fun addMoney(@RequestBody request: MoneyRequest): ResponseEntity<UserMoney> {
+        val money = repo.findById(request.uuid).orElse(UserMoney(request.uuid, 0))
         money.balance += request.amount
         return ResponseEntity.ok(repo.save(money))
     }
 
     @PostMapping("/pay")
-    fun payMoney(@RequestBody request: MoneyRequest): ResponseEntity<Money> {
-        val money = repo.findById(request.uuid).orElse(Money(request.uuid, 0))
+    fun payMoney(@RequestBody request: MoneyRequest): ResponseEntity<UserMoney> {
+        val money = repo.findById(request.uuid).orElse(UserMoney(request.uuid, 0))
         if (money.balance < request.amount) {
             return ResponseEntity.badRequest().build()
         }
@@ -37,8 +37,8 @@ class MoneyController(private val repo: MoneyRepository) {
     }
 
     @PostMapping("/set")
-    fun setMoney(@RequestBody request: MoneyRequest): ResponseEntity<Money> {
-        val money = repo.findById(request.uuid).orElse(Money(request.uuid, 0))
+    fun setMoney(@RequestBody request: MoneyRequest): ResponseEntity<UserMoney> {
+        val money = repo.findById(request.uuid).orElse(UserMoney(request.uuid, 0))
         if (money.balance < request.amount) {
             return ResponseEntity.badRequest().build()
         }
