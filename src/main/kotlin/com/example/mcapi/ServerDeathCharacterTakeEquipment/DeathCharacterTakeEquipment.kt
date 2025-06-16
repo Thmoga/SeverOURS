@@ -1,12 +1,12 @@
 package com.example.mcapi.ServerDeathCharacterTakeEquipment
 
+
+import com.example.mcapi.ServerUserMoney.ServerEquipment
 import jakarta.persistence.Column
-import jakarta.persistence.Embeddable
-import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.Table
-import java.io.Serializable
 
 //@Entity
 //@Table(name = "death_character_take_equipment")
@@ -27,5 +27,7 @@ import java.io.Serializable
 @Table(name="death_character_take_equipment")
 data class DeathCharacterTakeEquipment(
     @Id @Column(name="death_character_slot") var deathCharacterSlot: String?,
-    @Column(name="life_count") var lifeCount: Int
+    @Column(name="life_count") var lifeCount: Int,
+    @JoinColumn(name="server_equipment_code") var EquipmentCode: ServerEquipment,
+    @Column (name="equipment_records") var equipmentRecords: String?
 )
