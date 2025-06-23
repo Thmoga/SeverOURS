@@ -14,8 +14,8 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "user_have_feat")
 data class UserHaveFeat(
-    @Id @ManyToOne @JoinColumn(name = "user_uid") val userUid: UserInformation,
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ManyToOne @JoinColumn(name = "user_uid") val userUid: UserInformation,
+    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id") val id: Int = 1,
     @ManyToOne @JoinColumn(name = "user_have_feat") val userFeat: ServerFeat
 )

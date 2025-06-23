@@ -15,8 +15,8 @@ import java.io.Serializable
 @Entity
 @Table(name="user_have_item_option")
 data class UserHaveItemOption(
-    @Id@JoinColumn(name="user_uid") val userUid : UserInformation,
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name="user_uid") val userUid : UserInformation,
+    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_have_option_count") var userHaveOptionCount : Int,
     @Column(name="equiption_option_name") val equipmentOptionName : String,
     @Column(name="equiption_option_value") var equipmentOptionValue : Int
