@@ -10,7 +10,8 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "shop")
 data class Shop(
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id @Column(name = "shop_code") val shopCode: Int,
+    @Column(name = "shop_code") val shopCode: Int,
     @Column(name = "shop_name", length = 45) val shopName: String
 )

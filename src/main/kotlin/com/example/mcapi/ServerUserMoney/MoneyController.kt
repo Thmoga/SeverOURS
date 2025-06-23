@@ -1,7 +1,5 @@
 package com.example.mcapi.ServerUserMoney
 
-import com.example.mcapi.ServerUserInformation.UserInformationRepository
-import com.example.mcapi.ServerUserInformation.UserInformation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -10,55 +8,34 @@ data class MoneyRequest(val uuid: String, val amount: Int)
 @RestController
 @RequestMapping("/api/money")
 @CrossOrigin("38291")
-class MoneyController(
-    private val repo: MoneyRepository,
-    private val userInfoRepo: UserInformationRepository
-) {
+class MoneyController(private val service: MoneyService) {
+
+    @GetMapping
+    fun getAllMoney(): ResponseEntity<List<UserMoney>> {
+        return ResponseEntity.ok(service.getAllMoney())
+    }
 
     @GetMapping("/{uuid}")
     fun getMoney(@PathVariable uuid: String): ResponseEntity<UserMoney> {
-        val userInfo = userInfoRepo.findById(uuid)
-            .orElseThrow { NoSuchElementException("User not found: $uuid") }
-
-        val money = repo.findById(userInfo).orElseGet {
-            val newMoney = UserMoney(userUID = userInfo, balance = 0)
-            repo.save(newMoney)
-        }
-
-        return ResponseEntity.ok(money)
+        return ResponseEntity.ok(service.getMoney(uuid))
     }
 
     @PostMapping("/add")
     fun addMoney(@RequestBody request: MoneyRequest): ResponseEntity<UserMoney> {
-        val userInfo = userInfoRepo.findById(request.uuid)
-            .orElseThrow { NoSuchElementException("User not found: ${request.uuid}") }
-
-        val money = repo.findById(userInfo).orElse(UserMoney(userUID = userInfo, balance = 0))
-        money.balance += request.amount
-        return ResponseEntity.ok(repo.save(money))
+        return ResponseEntity.ok(service.modifyMoney(request.uuid, request.amount, "add"))
     }
 
     @PostMapping("/pay")
     fun payMoney(@RequestBody request: MoneyRequest): ResponseEntity<UserMoney> {
-        val userInfo = userInfoRepo.findById(request.uuid)
-            .orElseThrow { NoSuchElementException("User not found: ${request.uuid}") }
-
-        val money = repo.findById(userInfo).orElse(UserMoney(userUID = userInfo, balance = 0))
-        if (money.balance < request.amount) {
-            return ResponseEntity.badRequest().build()
+        return try {
+            ResponseEntity.ok(service.modifyMoney(request.uuid, request.amount, "pay"))
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity.badRequest().build()
         }
-
-        money.balance -= request.amount
-        return ResponseEntity.ok(repo.save(money))
     }
 
     @PostMapping("/set")
     fun setMoney(@RequestBody request: MoneyRequest): ResponseEntity<UserMoney> {
-        val userInfo = userInfoRepo.findById(request.uuid)
-            .orElseThrow { NoSuchElementException("User not found: ${request.uuid}") }
-
-        val money = repo.findById(userInfo).orElse(UserMoney(userUID = userInfo, balance = 0))
-        money.balance = request.amount
-        return ResponseEntity.ok(repo.save(money))
+        return ResponseEntity.ok(service.modifyMoney(request.uuid, request.amount, "set"))
     }
 }

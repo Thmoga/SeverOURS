@@ -14,9 +14,9 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "shop_item")
 data class ShopItem(
-    @ManyToOne @JoinColumn(name = "shop_code") val shopCode: Shop,
-    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shop_have_item_count") var shopHaveItemCount: Int = 1,
+    @ManyToOne @JoinColumn(name = "shop_code") val shopCode: Shop,
     @ManyToOne @JoinColumn(name = "shop_item_code") val serverItem: ServerItem,
     @Column(name = "shop_item_purchase_price") val shopItemPurchasePrice: Int,
     @Column(name = "shop_item_sell_price") val shopItemSellPrice: Int

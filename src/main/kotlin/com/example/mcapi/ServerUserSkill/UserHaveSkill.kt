@@ -14,8 +14,8 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "user_have_skill")
 data class UserHaveSkill(
-    @ManyToOne @JoinColumn(name = "user_uid") val userUID: UserInformation,
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skill_have_count") val skillHaveCount: Int = 1,
+    @ManyToOne @JoinColumn(name = "user_uid") val userUID: UserInformation,
     @ManyToOne @JoinColumn(name = "skill_code") val skill: ServerSkill
 )

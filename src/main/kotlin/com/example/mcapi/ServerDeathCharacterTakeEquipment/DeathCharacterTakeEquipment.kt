@@ -6,6 +6,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
 @Entity
@@ -13,6 +14,6 @@ import jakarta.persistence.Table
 data class DeathCharacterTakeEquipment(
     @Id @Column(name="death_character_slot") var deathCharacterSlot: String?,
     @Column(name="life_count") var lifeCount: Int,
-    @JoinColumn(name="server_equipment_code") var EquipmentCode: ServerEquipment,
+    @ManyToOne @JoinColumn(name="server_equipment_code") var EquipmentCode: ServerEquipment,
     @Column (name="equipment_records") var equipmentRecords: String?
 )
